@@ -12,10 +12,11 @@ import (
 
 // unpackCmd represents the unpack command.
 var unpackCmd = &cobra.Command{
-	Use:  "unpack <src.png> [flags]",
-	Long: "Unpack sprite sheet image.",
-	Args: cobra.ExactArgs(1),
-	Run:  main,
+	Use:   "unpack <src.png> [flags]",
+	Short: "Unpack sprite sheet image",
+	Long:  "Unpack sprite sheet image",
+	Args:  cobra.ExactArgs(1),
+	Run:   main,
 }
 
 func init() {
