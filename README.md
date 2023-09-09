@@ -10,6 +10,22 @@ Kaban is a simple tool for manipulating sprite sheet images.
 - [ ] Create sprite sheet image from individual images
 - [x] Unpack sprite sheet image into individual images
 
+
+## Example
+
+### Unpack
+
+```sh
+kaban unpack ./example/example.png
+```
+
+![example.png](/example/example.png)
+→
+![0_1__67_126.png](/example/0_1__67_126.png)
+&
+![76_0__128_128.png](example/76_0__128_128.png)
+
+
 ## Installation
 
 This package can be utilized either as a CLI tool or as a library.
