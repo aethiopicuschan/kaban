@@ -38,7 +38,7 @@ func growRegion(img image.Image, start types.Point, visited map[types.Point]bool
 			maxY = p.Y
 		}
 
-		for _, offset := range []types.Point{{X: -1, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: -1}, {X: 0, Y: 1}} {
+		for _, offset := range []types.Point{{X: -1, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: -1}, {X: 0, Y: 1}, {X: -1, Y: -1}, {X: -1, Y: 1}, {X: 1, Y: -1}, {X: -1, Y: -1}} {
 			neighbor := types.Point{X: p.X + offset.X, Y: p.Y + offset.Y}
 			if neighbor.X >= 0 && neighbor.X < img.Bounds().Dx() &&
 				neighbor.Y >= 0 && neighbor.Y < img.Bounds().Dy() &&
