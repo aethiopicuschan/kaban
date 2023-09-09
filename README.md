@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen?style=flat-square)](/LICENSE)
 
-Kaban is a simple tool for manipulating sprite sheet images.
+Kaban is a simple tool for manipulating sprite sheet images, written in Pure Go.
 
 ## Features
 
