@@ -16,17 +16,7 @@ var unpackCmd = &cobra.Command{
 	Short: "Unpack sprite sheet image",
 	Long:  "Unpack sprite sheet image",
 	Args:  cobra.ExactArgs(1),
-	Run:   main,
-}
-
-func init() {
-	unpackCmd.Flags().StringP("output-dir", "o", "./", "output directory")
-	// Size limit.
-	unpackCmd.Flags().IntP("min-width", "", 0, "minimum width of sprite")
-	unpackCmd.Flags().IntP("max-width", "", 0, "max width of sprite")
-	unpackCmd.Flags().IntP("min-height", "", 0, "minimum height of sprite")
-	unpackCmd.Flags().IntP("max-height", "", 0, "max height of sprite")
-	rootCmd.AddCommand(unpackCmd)
+	Run:   unpack,
 }
 
 // Create functional options from flags.
@@ -60,7 +50,7 @@ func crop(img image.Image, rect image.Rectangle) image.Image {
 	return img.(SubImager).SubImage(rect)
 }
 
-func main(c *cobra.Command, args []string) {
+func unpack(c *cobra.Command, args []string) {
 	// Check output directory.
 	outputDir, err := c.Flags().GetString("output-dir")
 	if err != nil {
