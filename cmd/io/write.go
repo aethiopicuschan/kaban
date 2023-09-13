@@ -4,12 +4,10 @@ import (
 	"image"
 	"image/png"
 	"os"
-	"path/filepath"
 )
 
-func WriteImage(dir, name string, img image.Image) (err error) {
-	pathToWrite := filepath.Join(dir, name)
-	file, err := os.Create(pathToWrite)
+func WriteImage(path string, img image.Image) (err error) {
+	file, err := os.Create(path)
 	if err != nil {
 		return
 	}

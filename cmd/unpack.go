@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"image"
 	"log"
+	"path/filepath"
 
 	kabanIo "github.com/aethiopicuschan/kaban/cmd/io"
 	"github.com/aethiopicuschan/kaban/detection"
@@ -65,10 +66,6 @@ func unpack(c *cobra.Command, args []string) {
 		log.Fatalf("accepts 1 arg(s), received %d", len(args))
 	}
 	src := args[0]
-	exist = kabanIo.IsFileExist(src)
-	if !exist {
-		log.Fatalf("source file %s does not exist", src)
-	}
 	// Read image.
 	img, err := kabanIo.ReadImage(src)
 	if err != nil {
@@ -88,7 +85,8 @@ func unpack(c *cobra.Command, args []string) {
 	for _, rect := range rects {
 		croppedImage := crop(img, rect)
 		filename := fmt.Sprintf("%d_%d__%d_%d.png", rect.Min.X, rect.Min.Y, rect.Max.X, rect.Max.Y)
-		if err := kabanIo.WriteImage(outputDir, filename, croppedImage); err != nil {
+		pathToWrite := filepath.Join(outputDir, filename)
+		if err := kabanIo.WriteImage(pathToWrite, croppedImage); err != nil {
 			log.Fatal(err)
 		}
 	}

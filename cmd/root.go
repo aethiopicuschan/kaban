@@ -14,13 +14,16 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
+	// Unpack command.
 	unpackCmd.Flags().StringP("output-dir", "o", "./", "output directory")
-	// Size limit.
 	unpackCmd.Flags().IntP("min-width", "", 0, "minimum width of sprite")
 	unpackCmd.Flags().IntP("max-width", "", 0, "max width of sprite")
 	unpackCmd.Flags().IntP("min-height", "", 0, "minimum height of sprite")
 	unpackCmd.Flags().IntP("max-height", "", 0, "max height of sprite")
 	rootCmd.AddCommand(unpackCmd)
+
+	// Pack command.
+	packCmd.Flags().StringP("output", "o", "./packed.png", "output file")
 	rootCmd.AddCommand(packCmd)
 }
 
