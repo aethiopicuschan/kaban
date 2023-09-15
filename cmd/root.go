@@ -8,7 +8,7 @@ var rootCmd = &cobra.Command{
 	Use:               "kaban",
 	Long:              "Kaban is a simple tool for manipulating sprite sheet images.",
 	CompletionOptions: cobra.CompletionOptions{DisableDefaultCmd: true},
-	Version:           "0.0.4",
+	Version:           "0.1.0",
 }
 
 func init() {

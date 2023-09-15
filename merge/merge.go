@@ -39,7 +39,7 @@ func getGridDimensions(totalImages int) (col, row int) {
 	}
 }
 
-func Merge(imgs []image.Image, options ...func(*Option)) (mergedImg image.Image, points []image.Point, err error) {
+func Merge(imgs []image.Image, options ...func(*Option)) (mergedImg image.Image, rects []image.Rectangle, err error) {
 	if len(imgs) == 0 {
 		err = errors.New("no images")
 		return
@@ -64,8 +64,9 @@ func Merge(imgs []image.Image, options ...func(*Option)) (mergedImg image.Image,
 			offsetX := x * (gridWidth + 1)
 			offsetY := y * (gridHeight + 1)
 			bounds := image.Rect(offsetX, offsetY, offsetX+gridWidth, offsetY+gridHeight)
-			draw.Draw(mergedImg.(*image.RGBA), bounds, imgs[index], image.Point{0, 0}, draw.Src)
-			points = append(points, image.Point{offsetX, offsetY})
+			img := imgs[index]
+			draw.Draw(mergedImg.(*image.RGBA), bounds, img, image.Point{0, 0}, draw.Src)
+			rects = append(rects, image.Rect(offsetX, offsetY, offsetX+img.Bounds().Dx(), offsetY+img.Bounds().Dy()))
 			index++
 			if index >= len(imgs) {
 				break
