@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"log"
-
 	"github.com/spf13/cobra"
 )
 
@@ -15,20 +13,14 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	// Unpack command.
-	unpackCmd.Flags().StringP("output-dir", "o", "./", "output directory")
-	unpackCmd.Flags().IntP("min-width", "", 0, "minimum width of sprite")
-	unpackCmd.Flags().IntP("max-width", "", 0, "max width of sprite")
-	unpackCmd.Flags().IntP("min-height", "", 0, "minimum height of sprite")
-	unpackCmd.Flags().IntP("max-height", "", 0, "max height of sprite")
+	initUnpackCmd()
 	rootCmd.AddCommand(unpackCmd)
 
 	// Pack command.
-	packCmd.Flags().StringP("output", "o", "./packed.png", "output file")
+	initPackCmd()
 	rootCmd.AddCommand(packCmd)
 }
 
-func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		log.Fatal(err)
-	}
+func Execute() (err error) {
+	return rootCmd.Execute()
 }
