@@ -25,17 +25,31 @@ func initPackCmd() {
 	packCmd.Flags().StringP("mode", "m", "grid", `packing mode. allowed: "grid"`)
 }
 
-func pack(c *cobra.Command, args []string) (err error) {
-	output, err := c.Flags().GetString("output")
-	if err != nil {
-		return
-	}
+// Create functional options from flags.
+func optionsPackCmd(c *cobra.Command) (opts []func(*merge.Option), err error) {
 	mode, err := c.Flags().GetString("mode")
 	if err != nil {
 		return
 	}
 	if mode != "grid" {
-		return errors.New("invalid mode")
+		err = errors.New("invalid mode")
+		return
+	}
+
+	opts = append(opts, merge.WithGridMode())
+	return
+}
+
+func pack(c *cobra.Command, args []string) (err error) {
+	output, err := c.Flags().GetString("output")
+	if err != nil {
+		return
+	}
+
+	// Create functional options from flags.
+	opts, err := optionsPackCmd(c)
+	if err != nil {
+		return
 	}
 
 	// Read source images.
@@ -49,7 +63,7 @@ func pack(c *cobra.Command, args []string) (err error) {
 	}
 
 	// Merge images.
-	mergedImg, err := merge.Merge(imgs...)
+	mergedImg, _, err := merge.Merge(imgs, opts...)
 	if err != nil {
 		return
 	}

@@ -29,7 +29,7 @@ func initUnpackCmd() {
 }
 
 // Create functional options from flags.
-func options(c *cobra.Command) (opts []func(*detection.Option), err error) {
+func optionsUnpackCmd(c *cobra.Command) (opts []func(*detection.Option), err error) {
 	funcMap := map[string]func(int) func(*detection.Option){
 		"min-width":  detection.WithMinWidth,
 		"max-width":  detection.WithMaxWidth,
@@ -75,7 +75,7 @@ func unpack(c *cobra.Command, args []string) (err error) {
 		return
 	}
 	// Create functional options from flags.
-	opts, err := options(c)
+	opts, err := optionsUnpackCmd(c)
 	if err != nil {
 		return
 	}
