@@ -44,7 +44,6 @@ You can import following package to your project.
 ```go
 import (
   "github.com/aethiopicuschan/kaban/detection"
-  "github.com/aethiopicuschan/kaban/types"
 )
 ```
 

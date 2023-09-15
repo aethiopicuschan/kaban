@@ -3,8 +3,6 @@ package detection
 import (
 	"image"
 	"image/color"
-
-	"github.com/aethiopicuschan/kaban/types"
 )
 
 func isTransparent(c color.Color) bool {
@@ -12,8 +10,8 @@ func isTransparent(c color.Color) bool {
 	return a == 0
 }
 
-func growRegion(img image.Image, start types.Point, visited map[types.Point]bool) image.Rectangle {
-	queue := []types.Point{start}
+func growRegion(img image.Image, start image.Point, visited map[image.Point]bool) image.Rectangle {
+	queue := []image.Point{start}
 	minX, minY, maxX, maxY := start.X, start.Y, start.X, start.Y
 
 	for len(queue) > 0 {
@@ -38,8 +36,8 @@ func growRegion(img image.Image, start types.Point, visited map[types.Point]bool
 			maxY = p.Y
 		}
 
-		for _, offset := range []types.Point{{X: -1, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: -1}, {X: 0, Y: 1}, {X: -1, Y: -1}, {X: -1, Y: 1}, {X: 1, Y: -1}, {X: -1, Y: -1}} {
-			neighbor := types.Point{X: p.X + offset.X, Y: p.Y + offset.Y}
+		for _, offset := range []image.Point{{X: -1, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: -1}, {X: 0, Y: 1}, {X: -1, Y: -1}, {X: -1, Y: 1}, {X: 1, Y: -1}, {X: -1, Y: -1}} {
+			neighbor := image.Point{X: p.X + offset.X, Y: p.Y + offset.Y}
 			if neighbor.X >= 0 && neighbor.X < img.Bounds().Dx() &&
 				neighbor.Y >= 0 && neighbor.Y < img.Bounds().Dy() &&
 				!isTransparent(img.At(neighbor.X, neighbor.Y)) {
@@ -69,12 +67,12 @@ func Detect(img image.Image, options ...func(*Option)) (rects []image.Rectangle,
 	}
 
 	// Map of visited point.
-	visited := make(map[types.Point]bool)
+	visited := make(map[image.Point]bool)
 
 	for y := 0; y < srcHeight; y++ {
 		for x := 0; x < srcWidth; x++ {
-			if _, ok := visited[types.Point{X: x, Y: y}]; !ok && !isTransparent(img.At(x, y)) {
-				rect := growRegion(img, types.Point{X: x, Y: y}, visited)
+			if _, ok := visited[image.Point{X: x, Y: y}]; !ok && !isTransparent(img.At(x, y)) {
+				rect := growRegion(img, image.Point{X: x, Y: y}, visited)
 				// Ignore small rect in accordance with Option.
 				width := rect.Max.X - rect.Min.X
 				height := rect.Max.Y - rect.Min.Y
