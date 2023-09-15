@@ -45,17 +45,18 @@ This package can be utilized either as a CLI tool or as a library.
 
 ```sh
 go install github.com/aethiopicuschan/kaban@latest
-kaban -v
+kaban -h
 ```
 
 ### As a library
 
-You can import following package to your project.
+```sh
+go get github.com/aethiopicuschan/kaban
+```
 
 ```go
 import (
-  "github.com/aethiopicuschan/kaban/detection"
+	"github.com/aethiopicuschan/kaban/detection"
+	"github.com/aethiopicuschan/kaban/merge"
 )
 ```
-
-Then run `go mod tidy`.
