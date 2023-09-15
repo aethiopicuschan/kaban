@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"image"
 	"log"
+	"path/filepath"
 
 	kabanIo "github.com/aethiopicuschan/kaban/cmd/io"
 	"github.com/aethiopicuschan/kaban/detection"
@@ -16,21 +17,19 @@ var unpackCmd = &cobra.Command{
 	Short: "Unpack sprite sheet image",
 	Long:  "Unpack sprite sheet image",
 	Args:  cobra.ExactArgs(1),
-	Run:   main,
+	RunE:  unpack,
 }
 
-func init() {
+func initUnpackCmd() {
 	unpackCmd.Flags().StringP("output-dir", "o", "./", "output directory")
-	// Size limit.
 	unpackCmd.Flags().IntP("min-width", "", 0, "minimum width of sprite")
 	unpackCmd.Flags().IntP("max-width", "", 0, "max width of sprite")
 	unpackCmd.Flags().IntP("min-height", "", 0, "minimum height of sprite")
 	unpackCmd.Flags().IntP("max-height", "", 0, "max height of sprite")
-	rootCmd.AddCommand(unpackCmd)
 }
 
 // Create functional options from flags.
-func options(c *cobra.Command) (opts []func(*detection.Option), err error) {
+func optionsUnpackCmd(c *cobra.Command) (opts []func(*detection.Option), err error) {
 	funcMap := map[string]func(int) func(*detection.Option){
 		"min-width":  detection.WithMinWidth,
 		"max-width":  detection.WithMaxWidth,
@@ -45,7 +44,6 @@ func options(c *cobra.Command) (opts []func(*detection.Option), err error) {
 				return nil, err
 			}
 			opts = append(opts, f(value))
-			log.Printf("Set %s to %d", name, value)
 		}
 	}
 
@@ -60,47 +58,41 @@ func crop(img image.Image, rect image.Rectangle) image.Image {
 	return img.(SubImager).SubImage(rect)
 }
 
-func main(c *cobra.Command, args []string) {
+func unpack(c *cobra.Command, args []string) (err error) {
 	// Check output directory.
 	outputDir, err := c.Flags().GetString("output-dir")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	exist := kabanIo.IsDirExist(outputDir)
 	if !exist {
-		log.Fatalf("output directory %s does not exist", outputDir)
-	}
-	// Check source file.
-	if len(args) != 1 {
-		log.Fatalf("accepts 1 arg(s), received %d", len(args))
+		return fmt.Errorf(`output directory "%s" does not exist`, outputDir)
 	}
 	src := args[0]
-	exist = kabanIo.IsFileExist(src)
-	if !exist {
-		log.Fatalf("source file %s does not exist", src)
-	}
 	// Read image.
 	img, err := kabanIo.ReadImage(src)
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
 	// Create functional options from flags.
-	opts, err := options(c)
+	opts, err := optionsUnpackCmd(c)
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
 	// Detect rects.
 	rects, err := detection.Detect(img, opts...)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	// Write cropped images.
 	for _, rect := range rects {
 		croppedImage := crop(img, rect)
 		filename := fmt.Sprintf("%d_%d__%d_%d.png", rect.Min.X, rect.Min.Y, rect.Max.X, rect.Max.Y)
-		if err := kabanIo.WriteImage(outputDir, filename, croppedImage); err != nil {
-			log.Fatal(err)
+		pathToWrite := filepath.Join(outputDir, filename)
+		if err := kabanIo.WriteImage(pathToWrite, croppedImage); err != nil {
+			return err
 		}
 	}
 	log.Printf("Unpacked %d images!", len(rects))
+	return
 }

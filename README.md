@@ -7,8 +7,8 @@ Kaban is a simple tool for manipulating sprite sheet images.
 
 ## Features
 
-- [ ] Create sprite sheet image from individual images
-- [x] Unpack sprite sheet image into individual images
+- Create sprite sheet image from individual images
+- Unpack sprite sheet image into individual images
 
 
 ## Example
@@ -25,6 +25,17 @@ kaban unpack ./example/example.png
 &
 ![76_0__128_128.png](example/76_0__128_128.png)
 
+### Pack
+
+```sh
+kaban pack ./example/0_1__67_126.png ./example/76_0__128_128.png -o ./example/packed.png
+```
+
+![0_1__67_126.png](/example/0_1__67_126.png)
++
+![76_0__128_128.png](example/76_0__128_128.png)
+→
+![packed.png](/example/packed.png)
 
 ## Installation
 
@@ -44,7 +55,6 @@ You can import following package to your project.
 ```go
 import (
   "github.com/aethiopicuschan/kaban/detection"
-  "github.com/aethiopicuschan/kaban/types"
 )
 ```
 
